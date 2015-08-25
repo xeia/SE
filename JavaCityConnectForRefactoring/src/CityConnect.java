@@ -100,11 +100,19 @@ public class CityConnect {
 	public static void main(String[] args) {
 		showToUser(WELCOME_MESSAGE);
 		while (true) {
-			System.out.print("Enter command:");
-			String userCommand = scanner.nextLine();
+			String userCommand = getInput();
 			String feedback = executeCommand(userCommand);
 			showToUser(feedback);
 		}
+	}
+
+	/**
+	 * @return
+	 */
+	private static String getInput() {
+		System.out.print("Enter command:");
+		String userCommand = scanner.nextLine();
+		return userCommand;
 	}
 
 	/*
