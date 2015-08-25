@@ -205,8 +205,7 @@ public class CityConnect {
 			return String.format(MESSAGE_NO_ROUTE, newStartLocation,
 					newEndLocation);
 		} 
-		else 
-		{
+		else {
 			return String.format(MESSAGE_DISTANCE, newStartLocation, newEndLocation,
 					routes[position][STORAGE_POSITION_DISTANCE]);
 		}
@@ -335,13 +334,9 @@ public class CityConnect {
 
 	private static String getFirstWord(String userCommand) {
 		return userCommand.trim().split("\\s+")[0];
-		//String commandTypeString = userCommand.trim().split("\\s+")[0];
-		//return commandTypeString;
 	}
 
 	private static String[] splitParameters(String commandParametersString) {
 		return commandParametersString.trim().split("\\s+");
-		//String[] parameters = commandParametersString.trim().split("\\s+");
-		//return parameters;
 	}
 }
