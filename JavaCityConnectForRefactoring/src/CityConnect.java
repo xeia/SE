@@ -119,7 +119,7 @@ public class CityConnect {
 		System.out.println(text);
 	}
 
-	public static String executeCommand(String userCommand) {
+	private static String executeCommand(String userCommand) {
 		if (userCommand.trim().equals(""))
 			return String.format(MESSAGE_INVALID_FORMAT, userCommand);
 
