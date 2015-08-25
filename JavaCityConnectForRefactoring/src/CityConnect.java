@@ -52,7 +52,7 @@ public class CityConnect {
 	private static final String MESSAGE_NO_SPACE = "No more space to store locations";
 
 	// These are the possible command types
-	enum COMMAND_TYPE {
+	enum CommandType {
 		ADD_ROUTE, GET_DISTANCE, INVALID, EXIT
 	};
 
@@ -125,7 +125,7 @@ public class CityConnect {
 
 		String commandTypeString = getFirstWord(userCommand);
 
-		COMMAND_TYPE commandType = determineCommandType(commandTypeString);
+		CommandType commandType = determineCommandType(commandTypeString);
 
 		switch (commandType) {
 		case ADD_ROUTE:
@@ -164,18 +164,18 @@ public class CityConnect {
 	 * @param commandTypeString
 	 *            is the first word of the user command
 	 */
-	private static COMMAND_TYPE determineCommandType(String commandTypeString) {
+	private static CommandType determineCommandType(String commandTypeString) {
 		if (commandTypeString == null)
 			throw new Error("command type string cannot be null!");
 
 		if (commandTypeString.equalsIgnoreCase("addroute")) {
-			return COMMAND_TYPE.ADD_ROUTE;
+			return CommandType.ADD_ROUTE;
 		} else if (commandTypeString.equalsIgnoreCase("getdistance")) {
-			return COMMAND_TYPE.GET_DISTANCE;
+			return CommandType.GET_DISTANCE;
 		} else if (commandTypeString.equalsIgnoreCase("exit")) {
-		 	return COMMAND_TYPE.EXIT;
+		 	return CommandType.EXIT;
 		} else {
-			return COMMAND_TYPE.INVALID;
+			return CommandType.INVALID;
 		}
 	}
 
