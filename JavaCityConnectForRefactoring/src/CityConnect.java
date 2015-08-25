@@ -72,7 +72,7 @@ public class CityConnect {
 	private static final int PARAM_POSITION_DISTANCE = 2;
 
 	// This array will be used to store the routes
-	private static String[][] route = new String[10][3];
+	private static String[][] routes = new String[10][3];
 
 	/*
 	 * These are the locations at which various components of the route will be
@@ -206,7 +206,7 @@ public class CityConnect {
 		else 
 		{
 			return String.format(MESSAGE_DISTANCE, newStartLocation, newEndLocation,
-					route[position][STORAGE_POSITION_DISTANCE]);
+					routes[position][STORAGE_POSITION_DISTANCE]);
 		}
 
 	}
@@ -217,10 +217,10 @@ public class CityConnect {
 	 */
 	private static int  getPositionOfExistingRoute(String newStartLocation,
 			String newEndLocation) {
-		for (int i = 0; i < route.length; i++) {
+		for (int i = 0; i < routes.length; i++) {
 
-			String existing_start_location = route[i][STORAGE_POSITION_START_LOCATION];
-			String existing_end_location = route[i][STORAGE_POSITION_END_LOCATION];
+			String existing_start_location = routes[i][STORAGE_POSITION_START_LOCATION];
+			String existing_end_location = routes[i][STORAGE_POSITION_END_LOCATION];
 
 			if (existing_start_location == null) { //beginning of empty slots
 				return NOT_FOUND; 
@@ -272,9 +272,9 @@ public class CityConnect {
 
 	private static void addRouteAtPosition(String newStartLocation,
 			String newEndLocation, String distance, int entryPosition) {
-		route[entryPosition][STORAGE_POSITION_START_LOCATION] = newStartLocation;
-		route[entryPosition][STORAGE_POSITION_END_LOCATION] = newEndLocation;
-		route[entryPosition][STORAGE_POSITION_DISTANCE] = distance;
+		routes[entryPosition][STORAGE_POSITION_START_LOCATION] = newStartLocation;
+		routes[entryPosition][STORAGE_POSITION_END_LOCATION] = newEndLocation;
+		routes[entryPosition][STORAGE_POSITION_DISTANCE] = distance;
 	}
 
 	/**
@@ -285,10 +285,10 @@ public class CityConnect {
 	private static int location(String newStartLocation,
 			String newEndLocation) {
 		
-		for (int i = 0; i < route.length; i++) {
+		for (int i = 0; i < routes.length; i++) {
 
-			String existingStartLocation = route[i][STORAGE_POSITION_START_LOCATION];
-			String existingEndLocation = route[i][STORAGE_POSITION_END_LOCATION];
+			String existingStartLocation = routes[i][STORAGE_POSITION_START_LOCATION];
+			String existingEndLocation = routes[i][STORAGE_POSITION_END_LOCATION];
 
 			if (existingStartLocation == null) { // empty slot
 				return i;
