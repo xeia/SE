@@ -166,9 +166,10 @@ public class CityConnect {
 	 *            is the first word of the user command
 	 */
 	private static CommandType determineCommandType(String commandTypeString) {
-		if (commandTypeString == null)
+		if (commandTypeString == null){
 			throw new Error("command type string cannot be null!");
-
+		}
+		
 		if (commandTypeString.equalsIgnoreCase("addroute")) {
 			return CommandType.ADD_ROUTE;
 		} else if (commandTypeString.equalsIgnoreCase("getdistance")) {
