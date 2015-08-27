@@ -1,1 +1,1 @@
-# Repo for CS2103 Software ENgineering
+# Repo for CS2103 Software Engineering
