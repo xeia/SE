@@ -9,30 +9,27 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
+
 /**
- * This class is used to store and retrieve the distance between various locations 
- * A route is assumed to be bidirectional. i.e., a route from CityA to CityB is 
- * same as a route from CityB to CityA. Furthermore, there can be no more than 
- * one route between two locations. Deleting a route is not supported at this point.
- * The storage limit for this version is 10 routes.
- * In the case more than multiple routes between the same two locations were entered,
- * we store only the latest one. The command format is given by the example interaction below:
-
- Welcome to SimpleRouteStore!
- Enter command:addroute Clementi BuonaVista 12
- Route from Clementi to BuonaVista with distance 12km added
- Enter command:getdistance Clementi BuonaVista
- Distance from Clementi to BuonaVista is 12
- Enter command:getdistance clementi buonavista
- Distance from clementi to buonavista is 12
- Enter command:getdistance Clementi JurongWest
- No route exists from Clementi to JurongWest!
- Enter command:addroute Clementi JurongWest 24
- Route from Clementi to JurongWest with distance 24km added
- Enter command:getdistance Clementi JurongWest
- Distance from Clementi to JurongWest is 24
- Enter command:exit
-
+ * This class is used to store and retrieve the distance between various
+ * locations A route is assumed to be bidirectional. i.e., a route from CityA to
+ * CityB is same as a route from CityB to CityA. Furthermore, there can be no
+ * more than one route between two locations. Deleting a route is not supported
+ * at this point. The storage limit for this version is 10 routes. In the case
+ * more than multiple routes between the same two locations were entered, we
+ * store only the latest one. The command format is given by the example
+ * interaction below:
+ * 
+ * Welcome to SimpleRouteStore! Enter command:addroute Clementi BuonaVista 12
+ * Route from Clementi to BuonaVista with distance 12km added Enter
+ * command:getdistance Clementi BuonaVista Distance from Clementi to BuonaVista
+ * is 12 Enter command:getdistance clementi buonavista Distance from clementi to
+ * buonavista is 12 Enter command:getdistance Clementi JurongWest No route
+ * exists from Clementi to JurongWest! Enter command:addroute Clementi
+ * JurongWest 24 Route from Clementi to JurongWest with distance 24km added
+ * Enter command:getdistance Clementi JurongWest Distance from Clementi to
+ * JurongWest is 24 Enter command:exit
+ * 
  * @author Dave Jun
  */
 public class CityConnect {
@@ -60,7 +57,7 @@ public class CityConnect {
 
 	// This is used to indicate there is no suitable slot to store route
 	private static final int SLOT_UNAVAILABLE = -1;
-	
+
 	// This is used to indicate the route was not found in the database
 	private static final int NOT_FOUND = -2;
 
@@ -68,7 +65,8 @@ public class CityConnect {
 	private static final int PARAM_SIZE_FOR_ADD_ROUTE = 3;
 	private static final int PARAM_SIZE_FOR_GET_DISTANCE = 2;
 
-	// These are the locations at which various parameters will appear in a command
+	// These are the locations at which various parameters will appear in a
+	// command
 	private static final int PARAM_POSITION_START_LOCATION = 0;
 	private static final int PARAM_POSITION_END_LOCATION = 1;
 	private static final int PARAM_POSITION_DISTANCE = 2;
@@ -119,8 +117,8 @@ public class CityConnect {
 
 	/*
 	 * ==============NOTE TO STUDENTS==========================================
-	 * If the reader wants a deeper understanding of the solution, he/she can 
-	 * go to the next level of abstraction by reading the methods (given below)
+	 * If the reader wants a deeper understanding of the solution, he/she can go
+	 * to the next level of abstraction by reading the methods (given below)
 	 * that is referenced by the method above.
 	 * ====================================================================
 	 */
@@ -133,7 +131,7 @@ public class CityConnect {
 		if (userCommand.trim().equals("")) {
 			return String.format(MESSAGE_INVALID_FORMAT, userCommand);
 		}
-		
+
 		String commandTypeString = getFirstWord(userCommand);
 
 		CommandType commandType = determineCommandType(commandTypeString);
@@ -148,13 +146,13 @@ public class CityConnect {
 		case EXIT:
 			System.exit(0);
 		default:
-			//throw an error if the command is not recognized
+			// throw an error if the command is not recognized
 			throw new Error("Unrecognized command type");
 		}
 		/*
 		 * ==============NOTE TO STUDENTS======================================
-		 * If the rest of the program is correct, this error will never be thrown.
-		 * That is why we use an Error instead of an Exception.
+		 * If the rest of the program is correct, this error will never be
+		 * thrown. That is why we use an Error instead of an Exception.
 		 * ====================================================================
 		 */
 	}
@@ -176,16 +174,16 @@ public class CityConnect {
 	 *            is the first word of the user command
 	 */
 	private static CommandType determineCommandType(String commandTypeString) {
-		if (commandTypeString == null){
+		if (commandTypeString == null) {
 			throw new Error("command type string cannot be null!");
 		}
-		
+
 		if (commandTypeString.equalsIgnoreCase("addroute")) {
 			return CommandType.ADD_ROUTE;
 		} else if (commandTypeString.equalsIgnoreCase("getdistance")) {
 			return CommandType.GET_DISTANCE;
 		} else if (commandTypeString.equalsIgnoreCase("exit")) {
-		 	return CommandType.EXIT;
+			return CommandType.EXIT;
 		} else {
 			return CommandType.INVALID;
 		}
@@ -209,34 +207,35 @@ public class CityConnect {
 		String newStartLocation = parameters[PARAM_POSITION_START_LOCATION];
 		String newEndLocation = parameters[PARAM_POSITION_END_LOCATION];
 
-		int position = getPositionOfExistingRoute(newStartLocation, newEndLocation);
+		int position = getPositionOfExistingRoute(newStartLocation,
+				newEndLocation);
 
 		if (position == NOT_FOUND) {
 			return String.format(MESSAGE_NO_ROUTE, newStartLocation,
 					newEndLocation);
-		} 
-		else {
-			return String.format(MESSAGE_DISTANCE, newStartLocation, newEndLocation,
-					routes[position][STORAGE_POSITION_DISTANCE]);
+		} else {
+			return String
+					.format(MESSAGE_DISTANCE, newStartLocation, newEndLocation,
+							routes[position][STORAGE_POSITION_DISTANCE]);
 		}
 
 	}
 
 	/**
-	 * @return Returns the position of the route represented by 
-	 *    newStartLocation and newEndLocation. Returns NOT_FOUND if not found.
+	 * @return Returns the position of the route represented by newStartLocation
+	 *         and newEndLocation. Returns NOT_FOUND if not found.
 	 */
-	private static int  getPositionOfExistingRoute(String newStartLocation,
+	private static int getPositionOfExistingRoute(String newStartLocation,
 			String newEndLocation) {
 		for (int i = 0; i < routes.length; i++) {
 
 			String existing_start_location = routes[i][STORAGE_POSITION_START_LOCATION];
 			String existing_end_location = routes[i][STORAGE_POSITION_END_LOCATION];
 
-			if (existing_start_location == null) { //beginning of empty slots
-				return NOT_FOUND; 
-			} else if (sameRoute(existing_start_location, existing_end_location,
-					newStartLocation, newEndLocation)) { 
+			if (existing_start_location == null) { // beginning of empty slots
+				return NOT_FOUND;
+			} else if (sameRoute(existing_start_location,
+					existing_end_location, newStartLocation, newEndLocation)) {
 				return i;
 			}
 		}
@@ -253,10 +252,10 @@ public class CityConnect {
 	 * @return status of the operation
 	 */
 	private static String addRoute(String userCommand) {
-		
+
 		String[] parameters = splitParameters(removeFirstWord(userCommand));
-		
-		if (parameters.length < PARAM_SIZE_FOR_ADD_ROUTE){
+
+		if (parameters.length < PARAM_SIZE_FOR_ADD_ROUTE) {
 			return String.format(MESSAGE_INVALID_FORMAT, userCommand);
 		}
 
@@ -264,13 +263,13 @@ public class CityConnect {
 		String newEndLocation = parameters[PARAM_POSITION_END_LOCATION];
 		String distance = parameters[PARAM_POSITION_DISTANCE];
 
-		if (!isPositiveNonZeroInt(distance)){
+		if (!isPositiveNonZeroInt(distance)) {
 			return String.format(MESSAGE_INVALID_FORMAT, userCommand);
 		}
 
 		int slotPosition = location(newStartLocation, newEndLocation);
 
-		if (slotPosition == SLOT_UNAVAILABLE){
+		if (slotPosition == SLOT_UNAVAILABLE) {
 			return MESSAGE_NO_SPACE;
 		}
 
@@ -289,13 +288,12 @@ public class CityConnect {
 	}
 
 	/**
-	 * @return Returns a suitable slot for the route represented by 
-	 *   newStartLocation and newEndLocation. Returns SLOT_UNAVAILABLE if
-	 *   no suitable slot is found.
+	 * @return Returns a suitable slot for the route represented by
+	 *         newStartLocation and newEndLocation. Returns SLOT_UNAVAILABLE if
+	 *         no suitable slot is found.
 	 */
-	private static int location(String newStartLocation,
-			String newEndLocation) {
-		
+	private static int location(String newStartLocation, String newEndLocation) {
+
 		for (int i = 0; i < routes.length; i++) {
 
 			String existingStartLocation = routes[i][STORAGE_POSITION_START_LOCATION];
@@ -318,7 +316,7 @@ public class CityConnect {
 			String endLocation1, String startLocation2, String endLocation2) {
 
 		if ((startLocation1 == null) || (endLocation1 == null)
-				&& (startLocation2 == null) || (endLocation2 == null)){
+				&& (startLocation2 == null) || (endLocation2 == null)) {
 			throw new Error("Route end points cannot be null");
 		}
 
@@ -331,7 +329,7 @@ public class CityConnect {
 	private static boolean isPositiveNonZeroInt(String s) {
 		try {
 			int i = Integer.parseInt(s);
-			//return true if i is greater than 0
+			// return true if i is greater than 0
 			return (i > 0 ? true : false);
 		} catch (NumberFormatException nfe) {
 			return false;
