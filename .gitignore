@@ -1,1 +1,4 @@
 /bin/
+.metadata/
+.recommenders/
+CE1/.settings/
