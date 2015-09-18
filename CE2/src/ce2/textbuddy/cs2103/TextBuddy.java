@@ -52,27 +52,27 @@ public class TextBuddy {
     private static final String MESSAGE_COMMAND_INVALID = "Invalid command specified.";
     private static final String MESSAGE_COMMAND_EMPTY = "Please enter a command.";
     private static final String MESSAGE_TERMINATE = "Program will now terminate...";
-    private static final String MESSAGE_OUTPUT_EXISTS = "Output file already exists, showing all current contents in file: \n";
-    private static final String MESSAGE_OUTPUT_APPEND_MODE = "\nOpening file in append mode... \nPlease type 'clear' to remove all contents.\n";
+    private static final String MESSAGE_OUTPUT_EXISTS = "Output file exists, showing all contents in file:";
+    private static final String MESSAGE_OUTPUT_APPEND_MODE = "File opened in append mode. Type 'clear' to remove all contents.";
 
     // Command Related
-    private static final String MESSAGE_ADD_EMPTY = "Unable to add with empty input parameters. Please input one or more characters after the 'add' command.";
+    private static final String MESSAGE_ADD_EMPTY = "Unable to add with empty input parameters.";
     private static final String MESSAGE_ADD_SUCCESS = "added to %s: \"%s\"";
     private static final String MESSAGE_DISPLAY_EMPTY = "%s is empty";
     private static final String MESSAGE_CLEAR = "all content deleted from %s";
-    private static final String MESSAGE_DELETE_INVALID_NUMBER = "Parameter specified as line number is invalid. Please use integers only.";
-    private static final String MESSAGE_DELETE_EMPTY = "Line number specified is invalid, there is no line available for deletion. Please try again.";
+    private static final String MESSAGE_DELETE_INVALID_NUMBER = "Parameter specified as line number is invalid.";
+    private static final String MESSAGE_DELETE_EMPTY = "Line number specified for deletion does not exist.";
     private static final String MESSAGE_DELETE_SUCCESS = "deleted from %s: \"%s\"";
-    private static final String MESSAGE_DELETE_MULTIPLE = "Multiple parameters detected. Please provide only one line number at a time.";
+    private static final String MESSAGE_DELETE_MULTIPLE = "Please provide only one line number at a time.";
     private static final String MESSAGE_EXIT = "Exiting TextBuddy... Goodbye!";
 
-    private static final String MESSAGE_EDIT_EMPTY = "Line number specified is invalid, there is no line available for editing. Please try again.";
+    private static final String MESSAGE_EDIT_EMPTY = "Line number specified is for editing does not exist.";
     private static final String MESSAGE_EDIT_SUCCESS = "\"%s\" has been modified to \"%s\".";
 
     // Output Filename Related
-    private static final String MESSAGE_OUTPUT_FILENAME_EMPTY = "The output filename cannot be empty. Please input one or more characters.";
-    private static final String MESSAGE_OUTPUT_FILENAME_MULTIPLE = "There are multiple filenames provided. Please provide only one filename.";
-    private static final String MESSAGE_OUTPUT_FILENAME_NONE = "There is no filename provided. A filename is required to output the text file.";
+    private static final String MESSAGE_OUTPUT_FILENAME_EMPTY = "Output filename cannot be empty.";
+    private static final String MESSAGE_OUTPUT_FILENAME_MULTIPLE = "Multiple filenames provided.";
+    private static final String MESSAGE_OUTPUT_FILENAME_NONE = "No file name provided.";
 
     // Error Messages
     private static final String ERROR_FILE_CREATE = "Error! Unable to create output file.";
@@ -135,12 +135,13 @@ public class TextBuddy {
      *            - Entire string entered by the user
      */
     private static void processCommand(String userInput) {
-        if (checkEmptyString(userInput)) {
+        if (isEmptyString(userInput)) {
             displayMessage(MESSAGE_COMMAND_EMPTY);
             return;
         }
         String userCommand = getCommand(userInput);
         String remainingInput = removeCommand(userInput, userCommand);
+        createLineBreak();
         switch (userCommand.toLowerCase()) {
         case COMMAND_ADD :
             doAdd(remainingInput);
@@ -172,6 +173,10 @@ public class TextBuddy {
         }
     }
 
+    private static void createLineBreak() {
+        System.out.println();
+    }
+
     /**
      * Adds a string into the output file if the string is not empty. Else it
      * prompts the user that empty strings are not accepted by the command.
@@ -182,9 +187,8 @@ public class TextBuddy {
      *            the output file generated.
      */
     private static void doAdd(String remainingInput) {
-        System.out.println();
         String textToAdd = remainingInput.trim();
-        if (checkEmptyString(textToAdd)) {
+        if (isEmptyString(textToAdd)) {
             displayMessage(MESSAGE_ADD_EMPTY);
             return;
         } else {
@@ -196,7 +200,6 @@ public class TextBuddy {
                         remainingInput);
             } catch (IOException e) {
                 displayError(ERROR_FILE_WRITE);
-                // e.printStackTrace();
                 terminateProgramWithMessage();
             }
         }
@@ -208,7 +211,6 @@ public class TextBuddy {
      */
     private static void doDisplay() {
         try {
-            System.out.println();
             initReader();
             String currLine = bufferedReader.readLine();
             int count = 1;
@@ -226,11 +228,9 @@ public class TextBuddy {
             closeReader();
         } catch (FileNotFoundException e) {
             displayError(ERROR_FILE_NOT_FOUND);
-            // e.printStackTrace();
             terminateProgramWithMessage();
         } catch (IOException e) {
             displayError(ERROR_FILE_READ);
-            // e.printStackTrace();
             terminateProgramWithMessage();
         }
     }
@@ -243,7 +243,6 @@ public class TextBuddy {
      *            LineNumber
      */
     private static void doDelete(String remainingInput) {
-        System.out.println();
         String[] parameters = splitString(remainingInput);
         if (parameters.length == 0) {
             displayMessage(MESSAGE_DELETE_EMPTY);
@@ -252,9 +251,9 @@ public class TextBuddy {
             displayMessage(MESSAGE_DELETE_MULTIPLE);
             return;
         } else {
-            String getLineNumber = getFirstParameter(parameters);
+            String lineNumber = getFirstParameter(parameters);
             try {
-                int lineNumberToRemove = Integer.parseInt(getLineNumber);
+                int lineNumberToRemove = Integer.parseInt(lineNumber);
 
                 File tempFile = createTempFile();
                 initReader();
@@ -284,24 +283,21 @@ public class TextBuddy {
                     displayMessage(MESSAGE_DELETE_EMPTY);
                 }
 
-                boolean deleteSuccess = isDeleteSuccessful();
-                boolean renameSuccess = isRenameSuccessful(tempFile);
+                boolean isSuccessfullyDeleted = isDeleteSuccessful();
+                boolean isSuccessfullyRenamed = isRenameSuccessful(tempFile);
 
-                if (renameSuccess && deleteSuccess && deleted) {
+                if (isSuccessfullyRenamed && isSuccessfullyDeleted && deleted) {
                     displayFormattedMessage(MESSAGE_DELETE_SUCCESS, fileName,
                             deletedLine);
                 }
             } catch (NumberFormatException e) {
                 displayMessage(MESSAGE_DELETE_INVALID_NUMBER);
-                // e.printStackTrace();
                 return;
             } catch (FileNotFoundException e) {
                 displayError(ERROR_FILE_NOT_FOUND);
-                // e.printStackTrace();
                 terminateProgramWithMessage();
             } catch (IOException e) {
                 displayError(ERROR_FILE_WRITE);
-                // e.printStackTrace();
                 terminateProgramWithMessage();
             }
         }
@@ -314,12 +310,10 @@ public class TextBuddy {
     private static void doClear() {
         try {
             reinitializeFile();
-            System.out.println();
             displayFormattedMessage(MESSAGE_CLEAR, fileName);
 
         } catch (IOException e) {
             displayError(ERROR_FILE_WRITE);
-            // e.printStackTrace();
             terminateProgramWithMessage();
         }
     }
@@ -332,12 +326,11 @@ public class TextBuddy {
      *            - Contains the parameters in the form: LineNumber and TextToReplace
      */
     private static void doEdit(String remainingInput) {
-        System.out.println();
         String[] parameters = splitString(remainingInput);
-        String getLineNumber = getFirstParameter(parameters);
-        String getTextToReplace = removeParameter(remainingInput, getLineNumber);
+        String lineNumber = getFirstParameter(parameters);
+        String textToReplace = removeParameter(remainingInput, lineNumber);
         try {
-            int lineNumberToEdit = Integer.parseInt(getLineNumber);
+            int lineNumberToEdit = Integer.parseInt(lineNumber);
 
             File tempFile = createTempFile();
             initReader();
@@ -352,7 +345,7 @@ public class TextBuddy {
                 if (lineNumberToEdit == count) {
                     edited = true;
                     editedLine = currLine;
-                    writeLine(getTextToReplace);
+                    writeLine(textToReplace);
                     currLine = bufferedReader.readLine();
                     count++;
                 } else {
@@ -368,24 +361,21 @@ public class TextBuddy {
                 displayMessage(MESSAGE_EDIT_EMPTY);
             }
 
-            boolean deleteSuccess = isDeleteSuccessful();
-            boolean renameSuccess = isRenameSuccessful(tempFile);
+            boolean isSuccessfullyDeleted = isDeleteSuccessful();
+            boolean isSuccessfullyRenamed = isRenameSuccessful(tempFile);
 
-            if (renameSuccess && deleteSuccess && edited) {
+            if (isSuccessfullyRenamed && isSuccessfullyDeleted && edited) {
                 displayFormattedMessage(MESSAGE_EDIT_SUCCESS, editedLine,
-                        getTextToReplace);
+                        textToReplace);
             }
         } catch (NumberFormatException e) {
             displayMessage(MESSAGE_DELETE_INVALID_NUMBER);
-            // e.printStackTrace();
             return;
         } catch (FileNotFoundException e) {
             displayError(ERROR_FILE_NOT_FOUND);
-            // e.printStackTrace();
             terminateProgramWithMessage();
         } catch (IOException e) {
             displayError(ERROR_FILE_WRITE);
-            // e.printStackTrace();
             terminateProgramWithMessage();
         }
     }
@@ -398,7 +388,7 @@ public class TextBuddy {
      *            - Name to be used for the file to be created.
      */
     private static void processOutputFile(String inputName) {
-        if (checkEmptyString(inputName)) {
+        if (isEmptyString(inputName)) {
             displayMessage(MESSAGE_OUTPUT_FILENAME_EMPTY);
             terminateProgramWithMessage();
         }
@@ -418,7 +408,6 @@ public class TextBuddy {
                 outputFile.createNewFile();
             } catch (IOException e) {
                 displayError(ERROR_FILE_CREATE);
-                // e.printStackTrace();
                 terminateProgramWithMessage();
             }
         } else {
@@ -479,11 +468,11 @@ public class TextBuddy {
      * @return boolean - true if renaming is successful.
      */
     private static boolean isRenameSuccessful(File tempFile) {
-        boolean renameSuccess = tempFile.renameTo(outputFile);
-        if (!renameSuccess) {
+        boolean isRenameSuccess = tempFile.renameTo(outputFile);
+        if (!isRenameSuccess) {
             displayError(ERROR_FILE_RENAME);
         }
-        return renameSuccess;
+        return isRenameSuccess;
     }
 
     /**
@@ -492,15 +481,15 @@ public class TextBuddy {
      * @return boolean - true if deletion is successful.
      */
     private static boolean isDeleteSuccessful() {
-        boolean deleteSuccess = outputFile.delete();
-        if (!deleteSuccess) {
+        boolean isDeleteSuccess = outputFile.delete();
+        if (!isDeleteSuccess) {
             displayError(ERROR_FILE_DELETE);
         }
-        return deleteSuccess;
+        return isDeleteSuccess;
     }
 
     // Other Helper Functions
-    private static boolean checkEmptyString(String checkString) {
+    private static boolean isEmptyString(String checkString) {
         return checkString.trim().isEmpty();
     }
 
@@ -527,7 +516,6 @@ public class TextBuddy {
 
     private static void exitCheck(String remainingInput) {
         if (remainingInput.isEmpty()) {
-            System.out.println();
             displayMessage(MESSAGE_EXIT);
             System.exit(0);
         } else {
