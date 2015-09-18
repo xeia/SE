@@ -595,4 +595,18 @@ public class TextBuddy {
     private static String removeParameter(String input, String parameterToRemove) {
         return input.replaceFirst(parameterToRemove, "").trim();
     }
+    
+    // Test Methods - package protected
+    void testCommand(String input) {
+        processCommand(input);
+    }
+    
+    void testInitialize(String fileName) {
+        processOutputFile(fileName);
+    }
+    
+    void testEnd() {
+        isDeleteSuccessful();
+    }
+
 }
