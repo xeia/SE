@@ -49,7 +49,7 @@ public class Logic {
     }
 
     private String waitForUserInput() {
-        ui.displayMessage(MESSAGE_COMMAND_INPUT);
+        ui.displayMessageInline(MESSAGE_COMMAND_INPUT);
         String userInput = ui.getUserInput();
         return userInput;
     }
@@ -76,9 +76,9 @@ public class Logic {
     }
 
     private void initializeComponents(String[] args) {
+        _fileName = getFileName(args);
         initUi();
-        String fileName = getFileName(args);
-        initDataEngine(fileName, ui);
+        initDataEngine(_fileName, ui);
         initScanner();
     }
 
