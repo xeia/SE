@@ -12,6 +12,7 @@ public class Logic {
     private static final String COMMAND_DELETE = "delete";
     private static final String COMMAND_CLEAR = "clear";
     private static final String COMMAND_EXIT = "exit";
+    private static final String COMMAND_SORT = "sort";
 
     private DataEngine dataEngine;
     private UI ui;
@@ -85,6 +86,10 @@ public class Logic {
                 executeExit(remainingInput);
                 break;
 
+            case COMMAND_SORT :
+                executeSort(remainingInput);
+                break;
+
             default :
                 ui.displayMessage(ui.MESSAGE_COMMAND_INVALID);
                 return;
@@ -131,6 +136,14 @@ public class Logic {
         if (remainingInput.isEmpty()) {
             ui.displayMessage(ui.MESSAGE_EXIT);
             dataEngine.doExit();
+        } else {
+            ui.displayMessage(ui.MESSAGE_PARAMETERS_INVALID);
+        }
+    }
+
+    private void executeSort(String remainingInput){
+        if (remainingInput.isEmpty()) {
+            ui.displayMessage(ui.MESSAGE_SORT_SUCCESS);
         } else {
             ui.displayMessage(ui.MESSAGE_PARAMETERS_INVALID);
         }

@@ -25,6 +25,7 @@ public class UI {
     final String MESSAGE_EMPTY = "There are no tasks available.";
     final String MESSAGE_EXIT = "Exiting TextBuddy... Goodbye!";
     final String MESSAGE_PARAMETERS_INVALID = "Invalid parameters specified.";
+    final String MESSAGE_SORT_SUCCESS = "Sort successful.";
 
     final String MESSAGE_FILE_OUTPUT_EXISTS = "Output file already exists, loading file contents...";
     final String MESSAGE_FILE_OUTPUT_REMINDER = "Please type 'clear' to remove all contents.";
