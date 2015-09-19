@@ -205,8 +205,19 @@ public class TextBuddyTest {
 
     @Test
     public void testSort() {
+        // Test for command availability
         ByteArrayOutputStream outContent = setUpPrintStream();
         processAndExecute("sort");
         assertEquals("Sort success message", MESSAGE_SORT_SUCCESS + "\r\n", outContent.toString());
+
+        // Add two tasks in unsorted order and test for alphabetical sort
+        processAndExecute("add z");
+        processAndExecute("add a");
+        processAndExecute("sort");
+
+        String firstTask = tb.getTaskWithIndex(1);
+        String secondTask = tb.getTaskWithIndex(2);
+        assertEquals("'a' should come before 'z'", "a", firstTask);
+
     }
 }
