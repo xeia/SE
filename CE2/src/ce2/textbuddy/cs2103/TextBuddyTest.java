@@ -31,6 +31,7 @@ public class TextBuddyTest {
     private static final String MESSAGE_DELETE_MULTIPLE = "Please provide only one line number at a time.";
     private static final String MESSAGE_DISPLAY_EMPTY = "output.txt is empty";
     private static final String MESSAGE_PARAMETERS_INVALID = "Invalid parameters specified.";
+    private static final String MESSAGE_SEARCH_INVALID = "Please provide a search term.";
     private static final String MESSAGE_SORT_SUCCESS = "Sort successful.";
 
     @Before
@@ -204,6 +205,17 @@ public class TextBuddyTest {
     }
 
     @Test
+    public void testSearch() {
+        processAndExecute("add first task");
+        processAndExecute("add second task");
+        processAndExecute("add third task");
+
+        ByteArrayOutputStream outContent = setUpPrintStream();
+        processAndExecute("search");
+        assertEquals("Search invalid", MESSAGE_SEARCH_INVALID + "\r\n", outContent.toString());
+    }
+
+    @Test
     public void testSort() {
         // Test for command availability
         ByteArrayOutputStream outContent = setUpPrintStream();
@@ -252,6 +264,5 @@ public class TextBuddyTest {
         secondTask = tb.getTaskWithIndex(2);
         assertEquals("'aB' should come before 'Ab'", "aB", firstTask);
         assertEquals("'Ab' should come after 'aB'", "Ab", secondTask);
-
     }
 }
