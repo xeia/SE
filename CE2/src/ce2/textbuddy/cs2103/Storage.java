@@ -22,8 +22,8 @@ public class Storage {
         this._fileName = fileName;
     }
 
-    boolean initializeFile(String fileName) {
-        outputFile = createFileWithName(fileName);
+    boolean initializeFile() {
+        outputFile = createFileWithName(_fileName);
         return checkFileExist();
     }
 
@@ -31,7 +31,7 @@ public class Storage {
         outputFile.createNewFile();
     }
 
-    ArrayList<String> loadContent(String _fileName) throws IOException {
+    ArrayList<String> loadContent() throws IOException {
         initReader();
         String currLine;
         ArrayList<String> taskList = new ArrayList<String>();
@@ -50,6 +50,11 @@ public class Storage {
         closeWriter();
     }
 
+    boolean deleteOutputFile() {
+        boolean isDeleteSuccess = outputFile.delete();
+        return isDeleteSuccess;
+  }
+
     private File createFileWithName(String inputName) {
         return new File(inputName);
     }
@@ -57,45 +62,6 @@ public class Storage {
     private boolean checkFileExist() {
         return outputFile.exists();
     }
-
-    /**
-     * Creates a temporary file to write contents, used by delete method
-     *
-     * @return File - new temporary file
-     */
-    private File createTempFile() {
-        String tempFileName = _fileName + ".tmp";
-        File tempFile = new File(tempFileName);
-        return tempFile;
-    }
-
-//    /**
-//     * Checks if the renaming of the temporary file is successful.
-//     *
-//     * @param tempFile
-//     *            - File to be renamed
-//     * @return boolean - true if renaming is successful.
-//     */
-//    private boolean isRenameSuccessful(File tempFile) {
-//        boolean isRenameSuccess = tempFile.renameTo(outputFile);
-//        if (!isRenameSuccess) {
-//            displayError(ERROR_FILE_RENAME);
-//        }
-//        return isRenameSuccess;
-//    }
-//
-//    /**
-//     * Checks if the deletion of the current output file is successful.
-//     *
-//     * @return boolean - true if deletion is successful.
-//     */
-//    private boolean isDeleteSuccessful() {
-//        boolean isDeleteSuccess = outputFile.delete();
-//        if (!isDeleteSuccess) {
-//            displayError(ERROR_FILE_DELETE);
-//        }
-//        return isDeleteSuccess;
-//    }
 
     private void initWriter(File fileToWrite) throws IOException {
         fileWriter = new FileWriter(fileToWrite);
@@ -107,16 +73,6 @@ public class Storage {
         bufferedReader = new BufferedReader(fileReader);
     }
 
-//    private void initWriterAppendMode(File fileToWrite) throws IOException {
-//        fileWriter = new FileWriter(fileToWrite, true);
-//        bufferedWriter = new BufferedWriter(fileWriter);
-//    }
-//
-//    private void writeLine(String remainingInput) throws IOException {
-//        bufferedWriter.write(remainingInput);
-//        bufferedWriter.newLine();
-//    }
-
     private void closeWriter() throws IOException {
         bufferedWriter.close();
         fileWriter.close();
@@ -125,10 +81,5 @@ public class Storage {
     private void closeReader() throws IOException {
         bufferedReader.close();
         fileReader.close();
-    }
-
-    private void reinitializeFile() throws IOException {
-        fileWriter = new FileWriter(outputFile);
-        fileWriter.close();
     }
 }
