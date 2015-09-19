@@ -80,6 +80,14 @@ public class DataEngine {
         return storage.deleteOutputFile();
     }
 
+    String getTask(int lineNumber) {
+        return taskList.get(lineNumber-1);
+    }
+
+    int getTotalLines() {
+        return taskList.size();
+    }
+
     private void terminateProgram() {
         System.exit(0);
     }

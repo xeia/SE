@@ -74,6 +74,7 @@ public class TextBuddyTest {
         String[] commandParts = tb.testProcessCommand("display");
         tb.testExecuteInput(commandParts);
 
+        assertTrue(tb.getNumberOfLines() == 0);
         assertEquals("Display empty message", MESSAGE_DISPLAY_EMPTY + "\r\n", outContent.toString());
     }
 
@@ -87,6 +88,7 @@ public class TextBuddyTest {
         commandParts = tb.testProcessCommand("display");
         tb.testExecuteInput(commandParts);
 
+        assertTrue(tb.getNumberOfLines() == 1);
         assertEquals("Display #item message", "Displaying 1 tasks:\r\n1. hihi\r\n", outContent.toString());
     }
 
@@ -98,6 +100,7 @@ public class TextBuddyTest {
         String[] commandParts = tb.testProcessCommand("add hello");
         tb.testExecuteInput(commandParts);
 
+        assertTrue(tb.getNumberOfLines() == 1);
         String outputString = String.format(MESSAGE_ADD_SUCCESS, "hello");
         assertEquals("Add success message", outputString + "\r\n", outContent.toString());
     }
@@ -110,6 +113,7 @@ public class TextBuddyTest {
         String[] commandParts = tb.testProcessCommand("add");
         tb.testExecuteInput(commandParts);
 
+        assertTrue(tb.getNumberOfLines() == 0);
         assertEquals("Add empty message", MESSAGE_ADD_EMPTY + "\r\n", outContent.toString());
     }
 
@@ -163,10 +167,12 @@ public class TextBuddyTest {
 
         String[] commandParts = tb.testProcessCommand("add TESTDELETE");
         tb.testExecuteInput(commandParts);
+        assertTrue(tb.getNumberOfLines() == 1);
 
         System.setOut(new PrintStream(outContent));
         commandParts = tb.testProcessCommand("delete 1");
         tb.testExecuteInput(commandParts);
+        assertTrue(tb.getNumberOfLines() == 0);
 
         String outputString = String.format(MESSAGE_DELETE_SUCCESS, "TESTDELETE");
         assertEquals("Delete success message", outputString + "\r\n", outContent.toString());
@@ -178,10 +184,12 @@ public class TextBuddyTest {
 
         String[] commandParts = tb.testProcessCommand("add TESTDELETE");
         tb.testExecuteInput(commandParts);
+        assertTrue(tb.getNumberOfLines() == 1);
 
         System.setOut(new PrintStream(outContent));
         commandParts = tb.testProcessCommand("clear");
         tb.testExecuteInput(commandParts);
+        assertTrue(tb.getNumberOfLines() == 0);
 
         assertEquals("Clear message", MESSAGE_CLEAR + "\r\n", outContent.toString());
     }

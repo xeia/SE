@@ -268,6 +268,10 @@ public class Logic {
         return processCommand(input);
     }
 
+    int getNumberOfLines() {
+        return dataEngine.getTotalLines();
+    }
+
     boolean reset() {
         return dataEngine.resetAll();
     }
