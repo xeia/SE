@@ -218,23 +218,32 @@ public class TextBuddyTest {
         assertEquals("Search invalid", MESSAGE_SEARCH_INVALID + "\r\n", outContent.toString());
 
         // Test for results
-//        try {
-            outContent = setUpPrintStream();
-            processAndExecute("search task");
-            String outputString = String.format(MESSAGE_SEARCH_SUCCESS, "task");
-            outputString = outputString.concat("\r\nDisplaying 3 tasks:\r\n1. first task\r\n2. second task\r\n3. third task");
-            assertEquals("Search success", outputString + "\r\n", outContent.toString());
+        outContent = setUpPrintStream();
+        processAndExecute("search task");
+        String outputString = String.format(MESSAGE_SEARCH_SUCCESS, "task");
+        outputString = outputString.concat("\r\nDisplaying 3 tasks:\r\n1. first task\r\n2. second task\r\n3. third task");
+        assertEquals("Search success", outputString + "\r\n", outContent.toString());
 
-            outContent = setUpPrintStream();
-            processAndExecute("search first");
-            outputString = String.format(MESSAGE_SEARCH_SUCCESS, "first");
-            outputString = outputString.concat("\r\nDisplaying 1 tasks:\r\n1. first task");
-            assertEquals("Search success", outputString + "\r\n", outContent.toString());
-            //outContent.writeTo(System.out);
-//        } catch (IOException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
+        outContent = setUpPrintStream();
+        processAndExecute("search first");
+        outputString = String.format(MESSAGE_SEARCH_SUCCESS, "first");
+        outputString = outputString.concat("\r\nDisplaying 1 tasks:\r\n1. first task");
+        assertEquals("Search success", outputString + "\r\n", outContent.toString());
+
+        outContent = setUpPrintStream();
+        processAndExecute("search a");
+        outputString = String.format(MESSAGE_SEARCH_SUCCESS, "a");
+        outputString = outputString.concat("\r\nDisplaying 3 tasks:\r\n1. first task\r\n2. second task\r\n3. third task");
+        assertEquals("Search success", outputString + "\r\n", outContent.toString());
+
+        // Ignore case search
+        processAndExecute("clear");
+        processAndExecute("add Abc");
+        outContent = setUpPrintStream();
+        processAndExecute("search a");
+        outputString = String.format(MESSAGE_SEARCH_SUCCESS, "a");
+        outputString = outputString.concat("\r\nDisplaying 1 tasks:\r\n1. Abc");
+        assertEquals("Search success", outputString + "\r\n", outContent.toString());
     }
 
     @Test

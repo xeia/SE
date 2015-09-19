@@ -80,13 +80,24 @@ public class DataEngine {
 
     void doSearch(String searchTerm) {
         ui.displayFormattedMessage(ui.MESSAGE_SEARCH_SUCCESS, searchTerm);
-        ui.displayText(taskList);
+        ArrayList<String> resultList = searchFor(searchTerm);
+        ui.displayText(resultList);
     }
 
     void doSort() throws IOException {
         Collections.sort(taskList, Collator.getInstance(Locale.ENGLISH));
         storage.saveFile(taskList);
         ui.displayMessage(ui.MESSAGE_SORT_SUCCESS);
+    }
+
+    private ArrayList<String> searchFor(String searchTerm) {
+        ArrayList<String> resultList = new ArrayList<String>();
+        for (String task : taskList) {
+            if (task.contains(searchTerm)) {
+                resultList.add(task);
+            }
+        }
+        return resultList;
     }
 
     boolean resetAll() {
