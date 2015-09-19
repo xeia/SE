@@ -88,7 +88,7 @@ public class Logic {
                 break;
 
             case COMMAND_SEARCH :
-                ui.displayMessage(ui.MESSAGE_SEARCH_INVALID);
+                executeSearch(remainingInput);
                 break;
 
             case COMMAND_SORT :
@@ -143,6 +143,13 @@ public class Logic {
             dataEngine.doExit();
         } else {
             ui.displayMessage(ui.MESSAGE_PARAMETERS_INVALID);
+        }
+    }
+    private void executeSearch(String remainingInput){
+        if (remainingInput.isEmpty()) {
+            ui.displayMessage(ui.MESSAGE_SEARCH_INVALID);
+        } else {
+            dataEngine.doSearch(remainingInput);
         }
     }
 

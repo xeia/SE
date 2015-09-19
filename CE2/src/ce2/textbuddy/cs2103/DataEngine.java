@@ -78,6 +78,11 @@ public class DataEngine {
         terminateProgram();
     }
 
+    void doSearch(String searchTerm) {
+        ui.displayFormattedMessage(ui.MESSAGE_SEARCH_SUCCESS, searchTerm);
+        ui.displayText(taskList);
+    }
+
     void doSort() throws IOException {
         Collections.sort(taskList, Collator.getInstance(Locale.ENGLISH));
         storage.saveFile(taskList);

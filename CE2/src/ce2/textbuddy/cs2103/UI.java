@@ -26,6 +26,7 @@ public class UI {
     final String MESSAGE_EXIT = "Exiting TextBuddy... Goodbye!";
     final String MESSAGE_PARAMETERS_INVALID = "Invalid parameters specified.";
     final String MESSAGE_SEARCH_INVALID = "Please provide a search term.";
+    final String MESSAGE_SEARCH_SUCCESS = "Showing results for \"%s\"";
     final String MESSAGE_SORT_SUCCESS = "Sort successful.";
 
     final String MESSAGE_FILE_OUTPUT_EXISTS = "Output file already exists, loading file contents...";

@@ -3,6 +3,7 @@ package ce2.textbuddy.cs2103;
 import static org.junit.Assert.*;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 
 import org.junit.After;
@@ -217,10 +218,23 @@ public class TextBuddyTest {
         assertEquals("Search invalid", MESSAGE_SEARCH_INVALID + "\r\n", outContent.toString());
 
         // Test for results
-        outContent = setUpPrintStream();
-        processAndExecute("search task");
-        String outputString = String.format(MESSAGE_SEARCH_SUCCESS, "task");
-        assertEquals("Search success", outputString + "\r\n", outContent.toString());
+//        try {
+            outContent = setUpPrintStream();
+            processAndExecute("search task");
+            String outputString = String.format(MESSAGE_SEARCH_SUCCESS, "task");
+            outputString = outputString.concat("\r\nDisplaying 3 tasks:\r\n1. first task\r\n2. second task\r\n3. third task");
+            assertEquals("Search success", outputString + "\r\n", outContent.toString());
+
+            outContent = setUpPrintStream();
+            processAndExecute("search first");
+            outputString = String.format(MESSAGE_SEARCH_SUCCESS, "first");
+            outputString = outputString.concat("\r\nDisplaying 1 tasks:\r\n1. first task");
+            assertEquals("Search success", outputString + "\r\n", outContent.toString());
+            //outContent.writeTo(System.out);
+//        } catch (IOException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
     }
 
     @Test
