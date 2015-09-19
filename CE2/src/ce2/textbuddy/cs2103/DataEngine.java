@@ -2,8 +2,10 @@ package ce2.textbuddy.cs2103;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Locale;
 
 public class DataEngine {
 
@@ -77,7 +79,7 @@ public class DataEngine {
     }
 
     void doSort() throws IOException {
-        Collections.sort(taskList);
+        Collections.sort(taskList, Collator.getInstance(Locale.ENGLISH));
         storage.saveFile(taskList);
         ui.displayMessage(ui.MESSAGE_SORT_SUCCESS);
     }
