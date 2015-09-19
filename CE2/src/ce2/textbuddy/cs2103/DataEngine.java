@@ -79,9 +79,13 @@ public class DataEngine {
     }
 
     void doSearch(String searchTerm) {
-        ui.displayFormattedMessage(ui.MESSAGE_SEARCH_SUCCESS, searchTerm);
         ArrayList<String> resultList = searchFor(searchTerm);
-        ui.displayText(resultList);
+        if (resultList.isEmpty()) {
+            ui.displayFormattedMessage(ui.MESSAGE_SEARCH_EMPTY, searchTerm);
+        } else {
+            ui.displayFormattedMessage(ui.MESSAGE_SEARCH_SUCCESS, searchTerm);
+            ui.displayText(resultList);
+        }
     }
 
     void doSort() throws IOException {

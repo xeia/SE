@@ -31,7 +31,7 @@ public class TextBuddyTest {
     private static final String MESSAGE_DELETE_MULTIPLE = "Please provide only one line number at a time.";
     private static final String MESSAGE_DISPLAY_EMPTY = "output.txt is empty";
     private static final String MESSAGE_PARAMETERS_INVALID = "Invalid parameters specified.";
-    private static final String MESSAGE_SEARCH_EMPTY = "There are no search results.";
+    private static final String MESSAGE_SEARCH_EMPTY = "There are no results for \"%s\".";
     private static final String MESSAGE_SEARCH_INVALID = "Please provide a search term.";
     private static final String MESSAGE_SEARCH_SUCCESS = "Showing results for \"%s\"";
     private static final String MESSAGE_SORT_SUCCESS = "Sort successful.";
@@ -241,10 +241,16 @@ public class TextBuddyTest {
         processAndExecute("add Abc");
 
         outContent = setUpPrintStream();
-        processAndExecute("search NONE");
-        assertEquals("Search results empty", MESSAGE_SEARCH_EMPTY, outContent.toString());
+        processAndExecute("search aBC");
+        outputString = String.format(MESSAGE_SEARCH_SUCCESS, "aBC");
+        outputString = outputString.concat("\r\nDisplaying 1 tasks:\r\n1. Abc\r\n");
+        assertEquals("Search success", outputString, outContent.toString());
 
         // No result test
+        outContent = setUpPrintStream();
+        processAndExecute("search NONE");
+        outputString = String.format(MESSAGE_SEARCH_EMPTY, "NONE");
+        assertEquals("Search results empty", outputString + "\r\n", outContent.toString());
     }
 
     @Test
