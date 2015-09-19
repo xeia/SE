@@ -12,6 +12,7 @@ public class Logic {
     private static final String COMMAND_DELETE = "delete";
     private static final String COMMAND_CLEAR = "clear";
     private static final String COMMAND_EXIT = "exit";
+    private static final String COMMAND_SEARCH = "search";
     private static final String COMMAND_SORT = "sort";
 
     private DataEngine dataEngine;
@@ -84,6 +85,10 @@ public class Logic {
 
             case COMMAND_EXIT :
                 executeExit(remainingInput);
+                break;
+
+            case COMMAND_SEARCH :
+                ui.displayMessage(ui.MESSAGE_SEARCH_INVALID);
                 break;
 
             case COMMAND_SORT :

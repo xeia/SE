@@ -32,6 +32,7 @@ public class TextBuddyTest {
     private static final String MESSAGE_DISPLAY_EMPTY = "output.txt is empty";
     private static final String MESSAGE_PARAMETERS_INVALID = "Invalid parameters specified.";
     private static final String MESSAGE_SEARCH_INVALID = "Please provide a search term.";
+    private static final String MESSAGE_SEARCH_SUCCESS = "Showing results for \"%s\"";
     private static final String MESSAGE_SORT_SUCCESS = "Sort successful.";
 
     @Before
@@ -210,9 +211,16 @@ public class TextBuddyTest {
         processAndExecute("add second task");
         processAndExecute("add third task");
 
+        // Test for command availability
         ByteArrayOutputStream outContent = setUpPrintStream();
         processAndExecute("search");
         assertEquals("Search invalid", MESSAGE_SEARCH_INVALID + "\r\n", outContent.toString());
+
+        // Test for results
+        outContent = setUpPrintStream();
+        processAndExecute("search task");
+        String outputString = String.format(MESSAGE_SEARCH_SUCCESS, "task");
+        assertEquals("Search success", outputString + "\r\n", outContent.toString());
     }
 
     @Test
