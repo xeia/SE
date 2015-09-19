@@ -141,7 +141,7 @@ public class Logic {
         }
     }
 
-    private void executeSort(String remainingInput){
+    private void executeSort(String remainingInput) throws IOException{
         if (remainingInput.isEmpty()) {
             dataEngine.doSort();
         } else {

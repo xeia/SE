@@ -76,8 +76,9 @@ public class DataEngine {
         terminateProgram();
     }
 
-    void doSort() {
+    void doSort() throws IOException {
         Collections.sort(taskList);
+        storage.saveFile(taskList);
         ui.displayMessage(ui.MESSAGE_SORT_SUCCESS);
     }
 

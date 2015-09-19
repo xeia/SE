@@ -210,7 +210,7 @@ public class TextBuddyTest {
         processAndExecute("sort");
         assertEquals("Sort success message", MESSAGE_SORT_SUCCESS + "\r\n", outContent.toString());
 
-        // Add two tasks in unsorted order and test for alphabetical sort
+        // Add two tasks in unsorted order and test for single character lower case alphabetical sort
         processAndExecute("add z");
         processAndExecute("add a");
         processAndExecute("sort");
@@ -219,6 +219,39 @@ public class TextBuddyTest {
         String secondTask = tb.getTaskWithIndex(2);
         assertEquals("'a' should come before 'z'", "a", firstTask);
         assertEquals("'z' should come after 'a'", "z", secondTask);
+
+        // Set up for multiple character lower case sort
+        processAndExecute("clear");
+        processAndExecute("add abc");
+        processAndExecute("add aaa");
+        processAndExecute("sort");
+
+        firstTask = tb.getTaskWithIndex(1);
+        secondTask = tb.getTaskWithIndex(2);
+        assertEquals("'aaa' should come before 'abc'", "aaa", firstTask);
+        assertEquals("'abc' should come after 'aaa'", "abc", secondTask);
+
+        // Set up for multiple character upper case sort
+        processAndExecute("clear");
+        processAndExecute("add ABC");
+        processAndExecute("add AAA");
+        processAndExecute("sort");
+
+        firstTask = tb.getTaskWithIndex(1);
+        secondTask = tb.getTaskWithIndex(2);
+        assertEquals("'AAA' should come before 'ABC'", "AAA", firstTask);
+        assertEquals("'ABC' should come after 'AAA'", "ABC", secondTask);
+
+        // Set up for multiple character mixed case sort
+        processAndExecute("clear");
+        processAndExecute("add aB");
+        processAndExecute("add Ab");
+        processAndExecute("sort");
+
+        firstTask = tb.getTaskWithIndex(1);
+        secondTask = tb.getTaskWithIndex(2);
+        assertEquals("'aB' should come before 'Ab'", "aB", firstTask);
+        assertEquals("'Ab' should come after 'aB'", "Ab", secondTask);
 
     }
 }
