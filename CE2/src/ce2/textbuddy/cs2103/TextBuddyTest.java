@@ -31,6 +31,7 @@ public class TextBuddyTest {
     private static final String MESSAGE_DELETE_MULTIPLE = "Please provide only one line number at a time.";
     private static final String MESSAGE_DISPLAY_EMPTY = "output.txt is empty";
     private static final String MESSAGE_PARAMETERS_INVALID = "Invalid parameters specified.";
+    private static final String MESSAGE_SORT_SUCCESS = "Sort successful.";
 
     @Before
     public void setUp() {
@@ -66,27 +67,34 @@ public class TextBuddyTest {
         assertTrue(expectedProcessedDisplay.equals(tb.testProcessCommand(displayCommand)[0]));
     }
 
+    private void processAndExecute(String input) {
+        String[] commandParts = tb.testProcessCommand(input);
+        tb.testExecuteInput(commandParts);
+    }
+
+    private ByteArrayOutputStream setUpPrintStream() {
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outContent));
+        return outContent;
+    }
+
     @Test
     public void testDisplayEmpty() {
-        final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
-
-        String[] commandParts = tb.testProcessCommand("display");
-        tb.testExecuteInput(commandParts);
+        ByteArrayOutputStream outContent = setUpPrintStream();
+        processAndExecute("display");
 
         assertTrue(tb.getNumberOfLines() == 0);
         assertEquals("Display empty message", MESSAGE_DISPLAY_EMPTY + "\r\n", outContent.toString());
     }
 
+
     @Test
     public void testDisplay() {
-        final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-        String[] commandParts = tb.testProcessCommand("add hihi");
-        tb.testExecuteInput(commandParts);
+        ByteArrayOutputStream outContent = setUpPrintStream();
+        processAndExecute("add hihi");
 
-        System.setOut(new PrintStream(outContent));
-        commandParts = tb.testProcessCommand("display");
-        tb.testExecuteInput(commandParts);
+        outContent = setUpPrintStream();
+        processAndExecute("display");
 
         assertTrue(tb.getNumberOfLines() == 1);
         assertEquals("Display #item message", "Displaying 1 tasks:\r\n1. hihi\r\n", outContent.toString());
@@ -94,24 +102,20 @@ public class TextBuddyTest {
 
     @Test
     public void testAdd() {
-        final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
-
-        String[] commandParts = tb.testProcessCommand("add hello");
-        tb.testExecuteInput(commandParts);
+        ByteArrayOutputStream outContent = setUpPrintStream();
+        processAndExecute("add hello");
 
         assertTrue(tb.getNumberOfLines() == 1);
         String outputString = String.format(MESSAGE_ADD_SUCCESS, "hello");
         assertEquals("Add success message", outputString + "\r\n", outContent.toString());
+
+        assertTrue(tb.getTaskWithIndex(1).equals("hello"));
     }
 
     @Test
     public void testAddEmpty() {
-        final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
-
-        String[] commandParts = tb.testProcessCommand("add");
-        tb.testExecuteInput(commandParts);
+        ByteArrayOutputStream outContent = setUpPrintStream();
+        processAndExecute("add");
 
         assertTrue(tb.getNumberOfLines() == 0);
         assertEquals("Add empty message", MESSAGE_ADD_EMPTY + "\r\n", outContent.toString());
@@ -119,59 +123,47 @@ public class TextBuddyTest {
 
     @Test
     public void testDeleteInvalidCharacter() {
-        final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
-
-        String[] commandParts = tb.testProcessCommand("delete x");
-        tb.testExecuteInput(commandParts);
+        ByteArrayOutputStream outContent = setUpPrintStream();
+        processAndExecute("delete x");
 
         assertEquals("Delete invalid character message", MESSAGE_DELETE_INVALID_NUMBER + "\r\n", outContent.toString());
     }
 
     @Test
     public void testDeleteNoParam() {
-        final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
-
-        String[] commandParts = tb.testProcessCommand("delete");
-        tb.testExecuteInput(commandParts);
+        ByteArrayOutputStream outContent = setUpPrintStream();
+        processAndExecute("delete");
 
         assertEquals("Delete invalid line message", MESSAGE_DELETE_EMPTY + "\r\n", outContent.toString());
     }
 
     @Test
     public void testDeleteMultiple() {
-        final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
-
-        String[] commandParts = tb.testProcessCommand("delete 1 2 3");
-        tb.testExecuteInput(commandParts);
+        processAndExecute("add 1");
+        processAndExecute("add 2");
+        processAndExecute("add 3");
+        ByteArrayOutputStream outContent = setUpPrintStream();
+        processAndExecute("delete 1 2 3");
 
         assertEquals("Delete multiple message", MESSAGE_DELETE_MULTIPLE + "\r\n", outContent.toString());
     }
 
     @Test
     public void testDeleteInvalidLine() {
-        final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
-
-        String[] commandParts = tb.testProcessCommand("delete 99999");
-        tb.testExecuteInput(commandParts);
+        ByteArrayOutputStream outContent = setUpPrintStream();
+        processAndExecute("delete 99999");
 
         assertEquals("Delete invalid character message", MESSAGE_DELETE_INVALID_NUMBER + "\r\n", outContent.toString());
     }
 
     @Test
     public void testDelete() {
-        final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-
-        String[] commandParts = tb.testProcessCommand("add TESTDELETE");
-        tb.testExecuteInput(commandParts);
+        ByteArrayOutputStream outContent = setUpPrintStream();
+        processAndExecute("add TESTDELETE");
         assertTrue(tb.getNumberOfLines() == 1);
 
-        System.setOut(new PrintStream(outContent));
-        commandParts = tb.testProcessCommand("delete 1");
-        tb.testExecuteInput(commandParts);
+        outContent = setUpPrintStream();
+        processAndExecute("delete 1");
         assertTrue(tb.getNumberOfLines() == 0);
 
         String outputString = String.format(MESSAGE_DELETE_SUCCESS, "TESTDELETE");
@@ -180,15 +172,13 @@ public class TextBuddyTest {
 
     @Test
     public void testClear() {
-        final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        ByteArrayOutputStream outContent = setUpPrintStream();
+        processAndExecute("add TESTCLEAR");
+        processAndExecute("add ANOTHER");
+        assertTrue(tb.getNumberOfLines() == 2);
 
-        String[] commandParts = tb.testProcessCommand("add TESTDELETE");
-        tb.testExecuteInput(commandParts);
-        assertTrue(tb.getNumberOfLines() == 1);
-
-        System.setOut(new PrintStream(outContent));
-        commandParts = tb.testProcessCommand("clear");
-        tb.testExecuteInput(commandParts);
+        outContent = setUpPrintStream();
+        processAndExecute("clear");
         assertTrue(tb.getNumberOfLines() == 0);
 
         assertEquals("Clear message", MESSAGE_CLEAR + "\r\n", outContent.toString());
@@ -198,30 +188,25 @@ public class TextBuddyTest {
     @Test
     public void testExtraParameters() {
         // clear command
-        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
-
-        String[] commandParts = tb.testProcessCommand("clear EXTRA");
-        tb.testExecuteInput(commandParts);
-
+        ByteArrayOutputStream outContent = setUpPrintStream();
+        processAndExecute("clear EXTRA");
         assertEquals("Invalid parameters message", MESSAGE_PARAMETERS_INVALID + "\r\n", outContent.toString());
 
         // display command
-        outContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
-
-        commandParts = tb.testProcessCommand("display EXTRA");
-        tb.testExecuteInput(commandParts);
-
+        outContent = setUpPrintStream();
+        processAndExecute("display EXTRA");
         assertEquals("Invalid parameters message", MESSAGE_PARAMETERS_INVALID + "\r\n", outContent.toString());
 
         // exit command
-        outContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
-
-        commandParts = tb.testProcessCommand("exit EXTRA");
-        tb.testExecuteInput(commandParts);
-
+        outContent = setUpPrintStream();
+        processAndExecute("exit EXTRA");
         assertEquals("Invalid parameters message", MESSAGE_PARAMETERS_INVALID + "\r\n", outContent.toString());
+    }
+
+    @Test
+    public void testSort() {
+        ByteArrayOutputStream outContent = setUpPrintStream();
+        processAndExecute("sort");
+        assertEquals("Sort success message", MESSAGE_SORT_SUCCESS + "\r\n", outContent.toString());
     }
 }

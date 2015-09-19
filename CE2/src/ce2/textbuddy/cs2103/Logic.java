@@ -272,6 +272,10 @@ public class Logic {
         return dataEngine.getTotalLines();
     }
 
+    String getTaskWithIndex(int index) {
+        return dataEngine.getTask(index);
+    }
+
     boolean reset() {
         return dataEngine.resetAll();
     }
