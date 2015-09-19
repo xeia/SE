@@ -143,7 +143,7 @@ public class Logic {
 
     private void executeSort(String remainingInput){
         if (remainingInput.isEmpty()) {
-            ui.displayMessage(ui.MESSAGE_SORT_SUCCESS);
+            dataEngine.doSort();
         } else {
             ui.displayMessage(ui.MESSAGE_PARAMETERS_INVALID);
         }

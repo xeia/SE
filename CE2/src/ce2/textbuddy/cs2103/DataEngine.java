@@ -3,6 +3,7 @@ package ce2.textbuddy.cs2103;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class DataEngine {
 
@@ -73,6 +74,11 @@ public class DataEngine {
 
     void doExit() {
         terminateProgram();
+    }
+
+    void doSort() {
+        Collections.sort(taskList);
+        ui.displayMessage(ui.MESSAGE_SORT_SUCCESS);
     }
 
     boolean resetAll() {

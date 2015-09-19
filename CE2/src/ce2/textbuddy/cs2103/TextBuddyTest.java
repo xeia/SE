@@ -218,6 +218,7 @@ public class TextBuddyTest {
         String firstTask = tb.getTaskWithIndex(1);
         String secondTask = tb.getTaskWithIndex(2);
         assertEquals("'a' should come before 'z'", "a", firstTask);
+        assertEquals("'z' should come after 'a'", "z", secondTask);
 
     }
 }
