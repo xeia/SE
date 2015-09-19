@@ -4,11 +4,13 @@ import java.util.Scanner;
 
 public class Logic {
 
-    private static final String MESSAGE_COMMAND_INPUT = "command: ";
-    private static final String MESSAGE_OUTPUT_FILENAME_MULTIPLE = "Please provide only one filename.";
-    private static final String MESSAGE_OUTPUT_FILENAME_NONE = "There is no filename provided.";
-    private static final String MESSAGE_TERMINATE = "Program will now terminate...";
-    private static final String MESSAGE_WELCOME = "Welcome to TextBuddy. %s is ready for use";
+    // This is the list of commands the program accepts. Will be used in a case
+    // switch later on.
+    private static final String COMMAND_ADD = "add";
+    private static final String COMMAND_DISPLAY = "display";
+    private static final String COMMAND_DELETE = "delete";
+    private static final String COMMAND_CLEAR = "clear";
+    private static final String COMMAND_EXIT = "exit";
 
     private DataEngine dataEngine;
     private UI ui;
@@ -38,10 +40,75 @@ public class Logic {
      */
     private void readInputs() {
         String userInput;
+        String[] commandParts;
         while (true) {
             userInput = waitForUserInput();
-            dataEngine.processCommand(userInput);
+            commandParts = processCommand(userInput);
+            executeCommand(commandParts);
         }
+    }
+
+    private String[] processCommand(String userInput) {
+        if (isEmptyString(userInput)) {
+            ui.displayMessage(ui.MESSAGE_COMMAND_EMPTY);
+            return null;
+        }
+        String[] commandParts = new String[2];
+        commandParts[0] = getCommand(userInput);
+        commandParts[1] = removeCommand(userInput, getCommand(userInput));
+        return commandParts;
+    }
+
+    private void executeCommand(String[] commandParts) {
+        String userCommand = commandParts[0];
+        String remainingInput = commandParts[1];
+        switch (userCommand.toLowerCase()) {
+        case COMMAND_ADD :
+            String textToAdd = remainingInput.trim();
+            if (isEmptyString(textToAdd)) {
+                ui.displayMessage(ui.MESSAGE_ADD_EMPTY);
+                return;
+            } else {
+                dataEngine.doAdd(textToAdd);
+                break;
+            }
+
+        case COMMAND_DISPLAY :
+            dataEngine.doDisplay();
+            break;
+
+        case COMMAND_DELETE :
+            dataEngine.doDelete(remainingInput);
+            break;
+
+        case COMMAND_CLEAR :
+            dataEngine.doClear();
+            break;
+
+        case COMMAND_EXIT :
+            dataEngine.exitCheck(remainingInput);
+            break;
+
+        default :
+            ui.displayMessage(ui.MESSAGE_COMMAND_INVALID);
+            return;
+        }
+    }
+
+    private boolean isEmptyString(String checkString) {
+        return checkString.trim().isEmpty();
+    }
+
+    private String getCommand(String userInput) {
+        return userInput.trim().split("\\s+")[0];
+    }
+
+    private String removeParameter(String input, String parameterToRemove) {
+        return input.replaceFirst(parameterToRemove, "").trim();
+    }
+
+    private String removeCommand(String userInput, String userCommand) {
+        return removeParameter(userInput, userCommand);
     }
 
     private String getFileName(String[] args) {
@@ -49,7 +116,7 @@ public class Logic {
     }
 
     private String waitForUserInput() {
-        ui.displayMessageInline(MESSAGE_COMMAND_INPUT);
+        ui.displayMessageInline(ui.MESSAGE_COMMAND_INPUT);
         String userInput = ui.getUserInput();
         return userInput;
     }
@@ -67,10 +134,10 @@ public class Logic {
         if (args.length == 1) {
             return true;
         } else if (args.length == 0) {
-            ui.displayMessage(MESSAGE_OUTPUT_FILENAME_NONE);
+            ui.displayMessage(ui.MESSAGE_OUTPUT_FILENAME_NONE);
             return false;
         } else {
-            ui.displayMessage(MESSAGE_OUTPUT_FILENAME_MULTIPLE);
+            ui.displayMessage(ui.MESSAGE_OUTPUT_FILENAME_MULTIPLE);
             return false;
         }
     }
@@ -94,12 +161,12 @@ public class Logic {
 
     private UI initUi(){
         ui = new UI();
-        ui.displayFormattedMessage(MESSAGE_WELCOME, _fileName);
+        ui.displayMessage(ui.MESSAGE_WELCOME);
         return ui;
     }
 
     private void terminateProgramWithMessage() {
-        ui.displayMessage(MESSAGE_TERMINATE);
+        ui.displayMessage(ui.MESSAGE_TERMINATE);
         System.exit(0);
     }
 }
