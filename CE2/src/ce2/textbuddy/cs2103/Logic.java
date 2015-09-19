@@ -254,4 +254,22 @@ public class Logic {
         ui.displayMessage(ui.MESSAGE_TERMINATE);
         System.exit(0);
     }
+
+    // Test methods
+    void testInitialize(String[] outputfilename) {
+        initializeComponents(outputfilename);
+    }
+
+    void testExecuteInput(String[] commandParts) {
+        executeCommand(commandParts);
+    }
+
+    String[] testProcessCommand(String input) {
+        return processCommand(input);
+    }
+
+    boolean reset() {
+        return dataEngine.resetAll();
+    }
+
 }

@@ -75,6 +75,11 @@ public class DataEngine {
         terminateProgram();
     }
 
+    boolean resetAll() {
+        // TODO Auto-generated method stub
+        return storage.deleteOutputFile();
+    }
+
     private void terminateProgram() {
         System.exit(0);
     }
