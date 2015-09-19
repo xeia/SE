@@ -31,11 +31,11 @@ public class UI {
     final String MESSAGE_FILE_OUTPUT_SUCCESS = "%s is ready for use!";
 
     final String ERROR_FILE_CREATE = "Error! Unable to create output file.";
-    final String ERROR_FILE_DELETE = "Error! Unable to delete file.";
     final String ERROR_FILE_NOT_FOUND = "Error! File does not exist.";
     final String ERROR_FILE_READ = "Error! Unable to read from output file.";
-    final String ERROR_FILE_RENAME = "Error! Unable to rename temp file.";
     final String ERROR_FILE_WRITE = "Error! Unable to write to output file.";
+
+    //final String ERROR_FILE_DELETE = "Error! Unable to delete file.";
 
     private Scanner _scanner;
 
@@ -67,8 +67,13 @@ public class UI {
             int listLength = taskList.size();
             displayFormattedMessage(MESSAGE_DISPLAY_COUNT, listLength);
             for (int i = 0; i < listLength; i++) {
-                displayMessage( i+1 + ". " + taskList.get(i));
+                displayMessage(formatCount(i+1) + taskList.get(i));
             }
         }
+    }
+
+    private String formatCount(int count) {
+        String countDisplay = Integer.toString(count) + ". ";
+        return countDisplay;
     }
 }
