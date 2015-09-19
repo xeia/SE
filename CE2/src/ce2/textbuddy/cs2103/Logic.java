@@ -39,7 +39,7 @@ public class Logic {
     private void readInputs() {
         String userInput;
         while (true) {
-            userInput = getUserInput();
+            userInput = waitForUserInput();
             dataEngine.processCommand(userInput);
         }
     }
@@ -48,9 +48,10 @@ public class Logic {
         return args[0];
     }
 
-    private String getUserInput() {
+    private String waitForUserInput() {
         ui.displayMessage(MESSAGE_COMMAND_INPUT);
-        return _scanner.nextLine();
+        String userInput = ui.getUserInput();
+        return userInput;
     }
 
     /**
