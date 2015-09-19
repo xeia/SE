@@ -9,14 +9,21 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * Storage handles all the file operations. It can load, create or write to a
+ * file, given a output file name.
+ *
+ * @author Xue Si
+ *
+ */
 public class Storage {
 
     private String _fileName;
-    private static File outputFile;
-    private static BufferedReader bufferedReader;
-    private static BufferedWriter bufferedWriter;
-    private static FileWriter fileWriter;
-    private static FileReader fileReader;
+    private File outputFile;
+    private BufferedReader bufferedReader;
+    private BufferedWriter bufferedWriter;
+    private FileWriter fileWriter;
+    private FileReader fileReader;
 
     public Storage(String fileName) {
         this._fileName = fileName;
@@ -31,6 +38,12 @@ public class Storage {
         outputFile.createNewFile();
     }
 
+    /**
+     * Used when an existing file has the same output file name, reads the
+     * content and saves into an ArrayList as the taskList.
+     * @return taskList, ArrayList with the contents of the file read
+     * @throws IOException
+     */
     ArrayList<String> loadContent() throws IOException {
         initReader();
         String currLine;
@@ -50,10 +63,11 @@ public class Storage {
         closeWriter();
     }
 
+    // Used in the JUnit test class to remove the output file after each run.
     boolean deleteOutputFile() {
         boolean isDeleteSuccess = outputFile.delete();
         return isDeleteSuccess;
-  }
+    }
 
     private File createFileWithName(String inputName) {
         return new File(inputName);

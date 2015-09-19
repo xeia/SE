@@ -3,6 +3,14 @@ package ce2.textbuddy.cs2103;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * UI manages all the printing and contains all the message strings
+ * used in the program. It also is in-charge of reading the user input
+ * to be passed back to Logic for processing.
+ *
+ * @author Xue Si
+ *
+ */
 public class UI {
 
     final String MESSAGE_COMMAND_EMPTY = "Please enter a command.";
@@ -20,7 +28,7 @@ public class UI {
     final String MESSAGE_DELETE_INVALID_NUMBER = "Parameter specified as line number is invalid.";
     final String MESSAGE_DELETE_SUCCESS = "deleted from %s: \"%s\"";
     final String MESSAGE_DELETE_MULTIPLE = "Please provide only one line number at a time.";
-    final String MESSAGE_DISPLAY_COUNT = "Displaying %s tasks:";
+    final String MESSAGE_DISPLAY_COUNT = "Displaying %s task(s):";
     final String MESSAGE_DISPLAY_EMPTY = "%s is empty";
     final String MESSAGE_EMPTY = "There are no tasks available.";
     final String MESSAGE_EXIT = "Exiting TextBuddy... Goodbye!";
@@ -63,6 +71,15 @@ public class UI {
         System.out.print(message);
     }
 
+    /**
+     * This method prints out the ArrayList of tasks in a list form:
+     * 1. First item
+     * 2. Second item
+     * etc. for better visualization and allows user to see the
+     * entry number at a glance for deletion, provided the tasklist
+     * is not empty.
+     * @param taskList, ArrayList containing all the tasks
+     */
     void displayText(ArrayList<String> taskList) {
         if (taskList.isEmpty()) {
             displayMessage(MESSAGE_EMPTY);
