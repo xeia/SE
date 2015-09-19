@@ -1,5 +1,6 @@
 package ce2.textbuddy.cs2103;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Logic {
@@ -62,34 +63,39 @@ public class Logic {
     private void executeCommand(String[] commandParts) {
         String userCommand = commandParts[0];
         String remainingInput = commandParts[1];
-        switch (userCommand.toLowerCase()) {
-        case COMMAND_ADD :
-            executeAdd(remainingInput);
-            break;
+        try {
+            switch (userCommand.toLowerCase()) {
+            case COMMAND_ADD :
+                executeAdd(remainingInput);
+                break;
 
-        case COMMAND_DISPLAY :
-            executeDisplay(remainingInput);
-            break;
+            case COMMAND_DISPLAY :
+                executeDisplay(remainingInput);
+                break;
 
-        case COMMAND_DELETE :
-            executeDelete(remainingInput);
-            break;
+            case COMMAND_DELETE :
+                executeDelete(remainingInput);
+                break;
 
-        case COMMAND_CLEAR :
-            executeClear(remainingInput);
-            break;
+            case COMMAND_CLEAR :
+                executeClear(remainingInput);
+                break;
 
-        case COMMAND_EXIT :
-            executeExit(remainingInput);
-            break;
+            case COMMAND_EXIT :
+                executeExit(remainingInput);
+                break;
 
-        default :
-            ui.displayMessage(ui.MESSAGE_COMMAND_INVALID);
-            return;
+            default :
+                ui.displayMessage(ui.MESSAGE_COMMAND_INVALID);
+                return;
+            }
+        } catch (IOException e) {
+            ui.displayMessage(ui.ERROR_FILE_WRITE);
+            terminateProgramWithMessage();
         }
     }
 
-    private void executeAdd(String remainingInput) {
+    private void executeAdd(String remainingInput) throws IOException {
         String textToAdd = remainingInput.trim();
         if (isEmptyString(textToAdd)) {
             ui.displayMessage(ui.MESSAGE_ADD_EMPTY);
@@ -98,7 +104,7 @@ public class Logic {
         }
     }
 
-    private void executeClear(String remainingInput) {
+    private void executeClear(String remainingInput) throws IOException {
         if (isEmptyString(remainingInput)) {
             dataEngine.doClear();
         } else {
@@ -106,7 +112,7 @@ public class Logic {
         }
     }
 
-    private void executeDelete(String remainingInput) {
+    private void executeDelete(String remainingInput) throws IOException {
         boolean isValidNumber = numberCheck(remainingInput);
         if (isValidNumber) {
             dataEngine.doDelete(remainingInput);
@@ -130,20 +136,17 @@ public class Logic {
         }
     }
 
-    private boolean numberCheck(String input) {
+    private boolean checkMultipleParam(String input) {
         // TODO Auto-generated method stub
-        if (isEmptyString(input)) {
-            ui.displayMessage(ui.MESSAGE_DELETE_EMPTY);
-            return false;
-        } else if (checkMultipleParam(input)) {
-            ui.displayMessage(ui.MESSAGE_DELETE_MULTIPLE);
-            return false;
-        } else if (isNotPositiveInteger(input)) {
-            ui.displayMessage(ui.MESSAGE_DELETE_INVALID_NUMBER);
-            return false;
-        } else {
+        String[] parameters = splitString(input);
+        if (parameters.length > 1) {
             return true;
         }
+        return false;
+    }
+
+    private boolean isEmptyString(String checkString) {
+        return checkString.trim().isEmpty();
     }
 
     private boolean isNotPositiveInteger(String input) {
@@ -161,17 +164,20 @@ public class Logic {
         return false;
     }
 
-    private boolean checkMultipleParam(String input) {
+    private boolean numberCheck(String input) {
         // TODO Auto-generated method stub
-        String[] parameters = splitString(input);
-        if (parameters.length > 1) {
+        if (isEmptyString(input)) {
+            ui.displayMessage(ui.MESSAGE_DELETE_EMPTY);
+            return false;
+        } else if (checkMultipleParam(input)) {
+            ui.displayMessage(ui.MESSAGE_DELETE_MULTIPLE);
+            return false;
+        } else if (isNotPositiveInteger(input)) {
+            ui.displayMessage(ui.MESSAGE_DELETE_INVALID_NUMBER);
+            return false;
+        } else {
             return true;
         }
-        return false;
-    }
-
-    private boolean isEmptyString(String checkString) {
-        return checkString.trim().isEmpty();
     }
 
     private String getCommand(String userInput) {
@@ -186,10 +192,6 @@ public class Logic {
         return removeParameter(userInput, userCommand);
     }
 
-    private String[] splitString(String stringToSplit) {
-        return stringToSplit.trim().split("\\s+");
-    }
-
     private String getFileName(String[] args) {
         return args[0];
     }
@@ -198,6 +200,10 @@ public class Logic {
         ui.displayMessageInline(ui.MESSAGE_COMMAND_INPUT);
         String userInput = ui.getUserInput();
         return userInput;
+    }
+
+    private String[] splitString(String stringToSplit) {
+        return stringToSplit.trim().split("\\s+");
     }
 
     /**
