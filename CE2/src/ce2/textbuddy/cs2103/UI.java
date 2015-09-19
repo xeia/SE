@@ -25,6 +25,7 @@ public class UI {
     final String MESSAGE_EMPTY = "There are no tasks available.";
     final String MESSAGE_EXIT = "Exiting TextBuddy... Goodbye!";
     final String MESSAGE_PARAMETERS_INVALID = "Invalid parameters specified.";
+    final String MESSAGE_SEARCH_EMPTY = "There are no search results.";
     final String MESSAGE_SEARCH_INVALID = "Please provide a search term.";
     final String MESSAGE_SEARCH_SUCCESS = "Showing results for \"%s\"";
     final String MESSAGE_SORT_SUCCESS = "Sort successful.";

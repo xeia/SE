@@ -93,7 +93,7 @@ public class DataEngine {
     private ArrayList<String> searchFor(String searchTerm) {
         ArrayList<String> resultList = new ArrayList<String>();
         for (String task : taskList) {
-            if (task.contains(searchTerm)) {
+            if (task.toLowerCase().contains(searchTerm.toLowerCase())) {
                 resultList.add(task);
             }
         }
